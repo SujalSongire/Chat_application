@@ -134,7 +134,8 @@ python manage.py test
 
 ## 📸 UI Snapshot
 
-*Add a screenshot or demo GIF of the chat interface here.*
+![Screenshot 2025-06-07 102918](https://github.com/user-attachments/assets/d240a34f-69ea-49be-a5a2-e7fe082055d9)
+
 
 ---
 
@@ -143,16 +144,3 @@ python manage.py test
 This project is licensed under the MIT License.
 
 ---
-
-## 🤝 Contributing
-
-Pull requests are welcome! For major changes, open an issue first to discuss what you'd like to change.
-
----
-
-## 📫 Contact
-
-**Your Name**  
-Email: [your.email@example.com](mailto:your.email@example.com)  
-GitHub: [github.com/your-username](https://github.com/your-username)
-EOF
