@@ -39,7 +39,8 @@ A fully functional **real-time chat application** built with **Django**, **Djang
 ### 1. Clone the Repository
 
 \`\`\`bash
-git clone https://github.com/your-username/django-realtime-chat.git
+git clone https://github.com/SujalSongire/Chat_application
+.git
 cd django-realtime-chat
 \`\`\`
 
