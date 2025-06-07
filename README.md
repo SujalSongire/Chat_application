@@ -19,17 +19,26 @@ A fully functional **real-time chat application** built with **Django**, **Djang
 ## 📁 Project Structure
 
 \`\`\`
-├── a_core/                 # Django project settings
-├── a_rtchat/               # Main chat app
-│   ├── consumers.py        # WebSocket consumers
-│   ├── models.py           # Database models
-│   ├── views.py            # Views for chatroom logic
-│   └── routing.py          # Channels routing
-├── static/                 # Static assets (CSS, JS, etc.)
-├── templates/              # HTML templates
-├── manage.py               # Django management CLI
-├── requirements.txt        # Python dependencies
-└── README.md               # You're here!
+├── a_core/                 # Django project settings and configuration
+│   └── __init__.py         # Core app init file (other standard files assumed: settings.py, urls.py, asgi.py, etc.)
+├── a_home/                 # Home or landing page app
+│   └── (views, urls, models, etc.)  # Files for handling homepage logic
+├── a_rtchat/               # Real-time chat application
+│   ├── consumers.py        # WebSocket consumers for chat
+│   ├── models.py           # Chat-related database models
+│   ├── views.py            # Views for handling chat logic
+│   └── routing.py          # WebSocket routing for channels
+├── a_users/                # User authentication and profile handling
+│   └── (models, views, urls, etc.)  # User login, registration, and profile logic
+├── media/avatars/          # Uploaded user avatar images
+├── static/                 # Static files (CSS, JavaScript, images)
+├── templates/              # HTML template files
+├── db.sqlite3              # SQLite database file
+├── manage.py               # Django’s command-line utility
+├── requirements.txt        # List of Python dependencies
+├── .gitignore              # Git ignore rules
+└── README.md               # Project overview and documentation
+
 \`\`\`
 
 ---
