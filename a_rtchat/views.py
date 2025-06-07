@@ -1,9 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+from django.http import HttpResponse
 from django.contrib import messages
-from django.http import Http404
-from .forms import *
+from django.http import Http404, HttpResponseNotAllowed
 from .models import *
+from .forms import *
 
 
 @login_required
@@ -26,7 +29,7 @@ def chat_view(request, chatroom_name='public-chat'):
             if request.user.emailaddress_set.filter(verified=True).exists():
                 chat_group.members.add(request.user)
             else:
-                messages.warning(request, 'Yoe need to verify your email to join the chat!')
+                messages.warning(request, 'You need to verify your email to join the chat!')
                 return redirect('profile-settings')
 
     if request.htmx:
@@ -53,7 +56,6 @@ def chat_view(request, chatroom_name='public-chat'):
     return render(request, 'a_rtchat/chat.html', context)
 
 
-@login_required
 def get_or_create_chatroom(request, username):
     if request.user.username == username:
         return redirect('home')
@@ -69,7 +71,6 @@ def get_or_create_chatroom(request, username):
             else:
                 chatroom = ChatGroup.objects.create(is_private=True)
                 chatroom.members.add(other_user, request.user)
-
     else:
         chatroom = ChatGroup.objects.create(is_private=True)
         chatroom.members.add(other_user, request.user)
@@ -134,7 +135,7 @@ def chatroom_delete_view(request, chatroom_name):
         messages.success(request, 'Chatroom deleted')
         return redirect('home')
 
-    return render(request, 'a_rtchat/chatroom_delete.html', {'chat_group': chat_group})
+    return render(request, 'a_rtchat/chatroom_delete.html', {"chat_group": chat_group})
 
 
 @login_required
@@ -148,4 +149,23 @@ def chatroom_leave_view(request, chatroom_name):
         messages.success(request, 'You left the Chat')
         return redirect('home')
 
-    return redirect('chatroom', chatroom_name=chatroom_name)
+
+def chat_file_upload(request, chatroom_name):
+    chat_group = get_object_or_404(ChatGroup, group_name=chatroom_name)
+
+    if request.htmx and request.FILES:
+        file = request.FILES['file']
+        message = GroupMessage.objects.create(
+            file=file,
+            author=request.user,
+            group=chat_group,
+        )
+        channel_layer = get_channel_layer()
+        event = {
+            'type': 'message_handler',
+            'message_id': message.id,
+        }
+        async_to_sync(channel_layer.group_send)(
+            chatroom_name, event
+        )
+    return HttpResponse()
